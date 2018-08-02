@@ -7,7 +7,7 @@ More information about it: http://archive.ics.uci.edu/ml/datasets/Human+Activity
 # Contents
 This repo contains:
 - A README file
-- The R script
-- A code book
+- The R script - run_analysis.R - which details the process step-by-step
+- A code book, which gives a broad vision of the project.
 
 For more information, please check the links above.
