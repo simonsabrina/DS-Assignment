@@ -1,13 +1,10 @@
-### Getting and Cleaning Data Assignment
-
+### GETTING AND CLEANING DATA FINAL ASSIGNMENT
 ### Author: Sabrina Simon
 ### August, 2018
 
 
 
-## Data download and unzip 
-
-# string variables for file download
+### Data download and unzip 
 fileName <- "UCIdata.zip"
 url <- "http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 dir <- "UCI HAR Dataset"
@@ -23,6 +20,7 @@ if(!file.exists(dir)){
 }
 
 
+
 ### Reading Data
 subject_test <- read.table("UCI HAR Dataset/test/subject_test.txt")
 subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt")
@@ -34,31 +32,31 @@ y_train <- read.table("UCI HAR Dataset/train/y_train.txt")
 activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt")
 features <- read.table("UCI HAR Dataset/features.txt")
 
-#-------------------------------------------------------------------------------#
+
+
 ### Data Analysis
 
-# 1. Merges the training and the test sets to create one data set:
+## 1. Merges the training and the test sets to create one data set:
 
 dataSet <- rbind(X_train,X_test)
 
 #-------------------------------------------------------------------------------#
 
-# 2. Extracts only the measurements on the mean and sd for each measurement:
+## 2. Extracts only the measurements on the mean and sd for each measurement:
 
-MeanStdOnly <- grep("mean()|std()", features[, 2]) 
-dataSet <- dataSet[,MeanStdOnly]
+MeanSdOnly <- grep("mean()|std()", features[, 2]) 
+dataSet <- dataSet[,MeanSdOnly]
 
 #-------------------------------------------------------------------------------#
 
-# 4. Appropriately labels the data set with descriptive activity names:
+## 3. Appropriately labels the data set with descriptive activity names:
 
-# Getting rid of "()" apply to the dataSet to rename labels
+# Getting rid of () apply to the dataSet to rename labels
 
 CleanFeatureNames <- sapply(features[, 2], function(x) {gsub("[()]", "",x)})
-names(dataSet) <- CleanFeatureNames[MeanStdOnly]
+names(dataSet) <- CleanFeatureNames[MeanSdOnly]
 
-# combine test and train of subject data and activity data
-# give descriptive lables
+# combine test and train of subject data and activity data give descriptive lables
 
 subject <- rbind(subject_train, subject_test)
 names(subject) <- 'subject'
@@ -67,11 +65,11 @@ names(activity) <- 'activity'
 
 # combine subject, activity, and mean and std only data set to create final df
 
-dataSet <- cbind(subject,activity, dataSet)
+dataSet <- cbind(subject, activity, dataSet)
 
 #-------------------------------------------------------------------------------#
 
-# 3. Uses descriptive activity names to name the activities in the data set
+## 4. Uses descriptive activity names to name the activities in the data set
 
 # group the activity column of dataSet
 # re-name lable of levels with activity_levels
@@ -88,8 +86,8 @@ dataSet$activity <- act_group
 
 library(reshape2)
 
-# melt data to tall skinny data and cast means. 
-# write the tidy data to the working directory as "tidy_data.txt"
+# melt data to tall skinny data and cast means
+# write the new dataset to the working directory as "tidy_data.txt"
 
 baseData <- melt(dataSet,(id.vars=c("subject","activity")))
 secondDataSet <- dcast(baseData, subject + activity ~ variable, mean)
